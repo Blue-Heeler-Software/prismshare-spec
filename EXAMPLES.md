@@ -86,4 +86,3 @@ matches the empty count.
 
 Other negative examples, including an unknown profile and unknown codec, are in
 `vectors/stream-v1.json` with their required dispositions.
-

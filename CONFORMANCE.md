@@ -78,4 +78,3 @@ Files under `vectors/` are canonical only when their manifest entry has
 `"status": "canonical"`. A scaffold or draft vector MUST NOT support a
 conformance claim. Every canonical entry requires an origin description,
 expected disposition and SHA-256 digest in `vectors/manifest.json`.
-

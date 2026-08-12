@@ -34,4 +34,3 @@ The first full symbol vector release should include:
 - exact plane bytes, matrix modules, rendered pixels and payload hashes;
 - mirrored captures and damaged/negative symbols; and
 - format v3 profile/header cases clearly labelled defined or experimental.
-

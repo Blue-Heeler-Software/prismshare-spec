@@ -72,4 +72,3 @@ input. Implementations SHOULD use maintained versions, argument arrays rather
 than shell interpolation, bounded temporary storage and least-privilege process
 execution. A protocol-conformant frame is not proof that its codec payload is
 safe for a particular decoder.
-

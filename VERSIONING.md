@@ -52,4 +52,3 @@ wire feature must state:
 | **defined** | Normatively specified but not proven through a camera. |
 | **experimental** | May change or be removed; not a stable conformance target. |
 | **falsified** | Implemented and tested, but failed the stated physical objective. |
-
