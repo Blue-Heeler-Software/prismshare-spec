@@ -80,7 +80,11 @@ def check_manifest() -> None:
             fail("vectors/manifest.json: missing or duplicate path")
         listed.add(rel)
         path = vector_dir / rel
-        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        # Git may materialise text files with CRLF on Windows. Vector hashes are
+        # defined over their UTF-8 repository form with LF line endings so the
+        # same immutable JSON has one digest on every checkout platform.
+        canonical_bytes = path.read_bytes().replace(b"\r\n", b"\n")
+        digest = hashlib.sha256(canonical_bytes).hexdigest()
         if digest != entry.get("sha256"):
             fail(f"vectors/{rel}: SHA-256 mismatch; got {digest}")
         data = load_json(path)

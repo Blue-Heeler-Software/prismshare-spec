@@ -1,7 +1,9 @@
 # PrismShare conformance vectors
 
 Vectors are versioned separately from prose. `manifest.json` lists every vector
-file, its SHA-256 digest, status and governing specification.
+file, its SHA-256 digest, status and governing specification. JSON digests are
+calculated over UTF-8 bytes with line endings normalized to LF, so Windows and
+Unix checkouts verify the same repository content.
 
 ## Status meanings
 

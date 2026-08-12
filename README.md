@@ -107,12 +107,6 @@ PrismShare Code and its Aphotic Transfer and PrismShare Stream payload
 protocols were created and authored by **[aXL333](https://github.com/aXL333)**
 and are published by **MASHR Systems**.
 
-## Author
-
-PrismShare Code and its Aphotic file-transfer and Prism Stream payload protocols
-were created and authored by **[aXL333](https://github.com/aXL333)** and are
-published by **MASHR Systems**.
-
 ## Acknowledgements
 
 The first public revision incorporates a detailed format review by
