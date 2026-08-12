@@ -1,0 +1,24 @@
+{
+  "manifestVersion": 1,
+  "suite": "PrismShare Protocol Suite",
+  "files": [
+    {
+      "path": "aphotic-fountain-v1.json",
+      "status": "canonical",
+      "authority": "APHOTIC.md section 5",
+      "sha256": "a52b558f7966efe4ae2c6391dcadab90e0cba41ee1dfe975a2e9624bbb55b8bf"
+    },
+    {
+      "path": "stream-v1.json",
+      "status": "canonical",
+      "authority": "STREAM.md sections 3 to 5",
+      "sha256": "ef30afec15a5f9b0486f852da8f99bee733b39005b957304acbf9530b334c33a"
+    },
+    {
+      "path": "symbol-vectors-v1.json",
+      "status": "scaffold",
+      "authority": "FORMAT.md",
+      "sha256": "1fd039d539970ce6149e4d9bdfdf0d4103c44b84439e7ce670b98ede654d81c0"
+    }
+  ]
+}

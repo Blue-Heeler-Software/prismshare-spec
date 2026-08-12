@@ -1,4 +1,14 @@
-# Per-channel bit loading, a proposal for format version 3
+# PrismShare Code per-channel bit loading
+
+> **Document status**
+>
+> | field | value |
+> |---|---|
+> | role | experimental format-version-3 extension |
+> | stable conformance target | no |
+> | implementation | profiles defined; profile 1 implemented |
+> | camera result | profile 1 falsified; remaining profiles unproven |
+> | wire authority | `FORMAT.md` section 4 controls where the texts overlap |
 
 Status: implemented in the reference codec, and **the premise did not survive
 hardware**. Read the last section before building on any of this. Format

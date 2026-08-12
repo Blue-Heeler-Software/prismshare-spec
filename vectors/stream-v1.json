@@ -1,0 +1,68 @@
+{
+  "vectorSet": "prismshare-stream-v1",
+  "status": "canonical",
+  "positive": [
+    {
+      "id": "amr-two-packets",
+      "hex": "505601123400000002020400000000000000000000000004000000000000000000000000",
+      "session": 4660,
+      "codecId": 0,
+      "flags": 0,
+      "headSequence": 2,
+      "packetCount": 2,
+      "packetSequences": [2, 1]
+    },
+    {
+      "id": "codec2-1300-talkspurt",
+      "hex": "505601beef8200fffe01123456789abcd0",
+      "session": 48879,
+      "codecId": 8,
+      "flags": 2,
+      "headSequence": 65534,
+      "packetCount": 1,
+      "packetSequences": [65534]
+    },
+    {
+      "id": "codec2-700c-wrap",
+      "hex": "5056010001900000000212345670abcdef00",
+      "session": 1,
+      "codecId": 9,
+      "flags": 0,
+      "headSequence": 0,
+      "packetCount": 2,
+      "packetSequences": [0, 16777215]
+    }
+  ],
+  "negative": [
+    {
+      "id": "zero-packets",
+      "hex": "50560112340000000000",
+      "disposition": "reject",
+      "reason": "packet count is below 1"
+    },
+    {
+      "id": "unknown-profile",
+      "hex": "50560212340000000000",
+      "disposition": "reject",
+      "reason": "profile version 2 is not defined"
+    },
+    {
+      "id": "unknown-codec",
+      "hex": "50560112347000000101ff",
+      "disposition": "ignore",
+      "reason": "codec id 7 is not allocated in profile version 1"
+    },
+    {
+      "id": "wrong-length",
+      "hex": "5056011234000000020104",
+      "disposition": "reject",
+      "reason": "AMR packet count requires 13 packet bytes"
+    },
+    {
+      "id": "amr-wrong-toc",
+      "hex": "505601123400000001010c000000000000000000000000",
+      "disposition": "reject",
+      "reason": "codec id 0 requires the AMR mode-0 TOC"
+    }
+  ]
+}

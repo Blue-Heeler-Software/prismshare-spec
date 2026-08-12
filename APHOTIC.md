@@ -1,6 +1,8 @@
-# Aphotic
+# Aphotic Transfer
 
-Aphotic carries a file across a sequence of [Prism Code](FORMAT.md) symbols. A
+**Aphotic Transfer** is PrismShare's exact-file payload protocol. Shortened to
+**Aphotic** after first use, it carries a file across a sequence of
+[PrismShare Code](FORMAT.md) symbols. A
 sender displays a file as an endless loop of symbols and a reader recovers it by
 watching; the link is one way, and Aphotic is what makes a one-way, lossy,
 camera-to-screen channel deliver an exact file anyway.
@@ -8,12 +10,22 @@ camera-to-screen channel deliver an exact file anyway.
 It is a payload protocol: every page rides inside a Prism symbol's payload and
 Aphotic changes nothing about the symbol format.
 
-**Status: implemented and in daily use at one bit per channel.** The wire format
-below is what the reference sender emits and the reference reader accepts.
+> **Document status**
+>
+> | field | value |
+> |---|---|
+> | role | normative exact-object payload protocol |
+> | wire discriminator | `PS` (`0x50 0x53`) |
+> | current revision | Aphotic Transfer version 1, identified by its fixed header and allocations |
+> | repair modes | none, fixed parity, and Aphotic Fountain (`0xFF`) |
+> | evidence | implemented and proven through real cameras at one bit per channel |
+
+The wire format below is what the reference sender emits and the reference
+reader accepts.
 
 ---
 
-## 1. What Aphotic is, and what it relies on
+## 1. What Aphotic Transfer is, and what it relies on
 
 A file is split into fixed-size **chunks**. Each chunk, wrapped in a 13-byte
 **page header**, is one **page**, and one page is the payload of one symbol. The
@@ -22,8 +34,8 @@ camera happens to catch, fills each chunk into its place, and has the file once
 every chunk is in hand.
 
 Aphotic delivers one exact object, eventually, taking as many laps as the losses
-demand. That is the opposite of [Prism Stream](STREAM.md), which delivers a live
-stream in real time and conceals what it cannot recover in time. A reader tells
+demand. That is the opposite of [PrismShare Stream](STREAM.md), which delivers
+a live stream in real time and conceals what it cannot recover in time. A reader tells
 the two apart, and both apart from a plain document, by the first two payload
 bytes: `PS` for an Aphotic page, `PV` for a stream frame, neither for a document.
 
@@ -147,7 +159,7 @@ transfer, which nothing downstream would catch.
 > assembled file has no checksum. The bound is normative for exactly that
 > reason.
 
-## 5. Rateless repair (the fountain)
+## 5. Aphotic Fountain rateless repair
 
 Marked by a repair-mode byte of `0xFF`, which the fixed scheme can never emit, so
 the byte disambiguates the two on the receive side.
@@ -333,7 +345,7 @@ does not run past the payload; and the name contains no control character and no
 That sequencing, loss handling and file identity are payload concerns that must
 live outside the optical symbol format, in a document of their own, was argued in
 a format review by **NomNomski**. This specification, and the
-[Prism Stream](STREAM.md) protocol beside it, are that argument carried out.
+[PrismShare Stream](STREAM.md) protocol beside it, are that argument carried out.
 
 ## License
 
