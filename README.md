@@ -1,9 +1,9 @@
-# Prism Code
+# PrismShare Code
 
-Prism Code is an open colour 2D barcode. It stacks several ordinary QR Codes into
-the red, green and blue channels of one symbol, so a single code carries several
-times the data of the black and white QR Code it is built from, while staying
-locatable by an ordinary QR detector.
+**PrismShare Code** (**PS Code**) is an open colour 2D barcode. It stacks several
+ordinary QR Codes into the red, green and blue channels of one symbol, so a
+single code carries several times the data of the black and white QR Code it is
+built from, while staying locatable by an ordinary QR detector.
 
 This repository is the **specification**, published for independent
 implementation and review. The reference implementation lives elsewhere; nothing
@@ -15,7 +15,7 @@ Three layers, three documents. The symbol format knows nothing of what it
 carries; the payload protocols know nothing of the optics.
 
 - **[FORMAT.md](FORMAT.md)** - the normative symbol format: exactly what bytes
-  and colours one Prism Code contains. Read this to build an encoder or decoder.
+  and colours one PS Code contains. Read this to build an encoder or decoder.
 - **[DECODER.md](DECODER.md)** - the reference decoder, informative. How a reader
   recovers the payload, including calibration, bit-depth estimation, and matching
   the reader's rate to a sender it cannot talk back to.
@@ -59,11 +59,17 @@ Corrections and review are welcome through this repository's issues.
 
 ## About the name
 
-Prism Code is an independent open format. Every plane of a symbol is a QR Code,
-and **QR Code is a registered trademark of DENSO WAVE INCORPORATED**; this
-project is not endorsed by or affiliated with the trademark holder, and
+PrismShare Code is an independent open format. Every plane of a symbol is a QR
+Code, and **QR Code is a registered trademark of DENSO WAVE INCORPORATED**;
+this project is not endorsed by or affiliated with the trademark holder, and
 implementers are responsible for their own assessment of any intellectual
 property that applies to QR Code encoding and decoding in their jurisdiction.
+
+## Author
+
+PrismShare Code and its Aphotic file-transfer and Prism Stream payload protocols
+were created and authored by **[aXL333](https://github.com/aXL333)** and are
+published by **MASHR Systems**.
 
 ## Acknowledgements
 
