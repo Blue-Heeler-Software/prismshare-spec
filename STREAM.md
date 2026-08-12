@@ -1,15 +1,29 @@
-# Prism Stream
+# PrismShare Stream
 
-Prism Stream carries a live, real-time byte stream over a sequence of
-[Prism Code](FORMAT.md) symbols. It is a payload protocol: it rides inside the
-symbol payload and changes nothing about the symbol format. Audio is its first
-and only defined profile, in section 5.
+**PrismShare Stream** carries live, time-sensitive packets over a sequence of
+[PrismShare Code](FORMAT.md) symbols. It is a payload protocol: it rides inside
+the symbol payload and changes nothing about the symbol format.
 
-**Status: implemented, unit-tested, and verified end to end through real
-cameras.** The frame format and the receiver logic below are proven in software
-against injected loss, and the audio profile has carried live speech from a
-monitor to a fleet of handsets, including contiguous playback on the weakest
-reader tested. Section 8 records what the optical link measured.
+Version 1 is deliberately narrower than a general-purpose streaming layer. It
+defines fixed-size, fixed-duration codec packets and an audio codec table. It
+does not define arbitrary fragmentation, per-packet lengths, timestamps,
+negotiation or authentication. Those require a future profile version; they are
+not accidentally missing fields in version 1.
+
+> **Document status**
+>
+> | field | value |
+> |---|---|
+> | role | normative live payload protocol with informative receiver guidance |
+> | wire discriminator | `PV` (`0x50 0x56`) |
+> | current profile | version 1, fixed-rate audio |
+> | codecs | AMR-NB 4.75, Codec2 1300, Codec2 700C |
+> | evidence | implemented, unit-tested and verified end to end through real cameras |
+
+The frame format is proven in software against injected loss, and the audio
+profile has carried live speech from a monitor to a fleet of handsets,
+including contiguous playback on the weakest reader tested. Section 8 records
+what the optical link measured.
 
 ---
 
@@ -22,8 +36,8 @@ it would rather conceal a gap than wait for a retransmission that would arrive
 too late to matter. A fountain peels a fixed object into completeness; a stream
 is unbounded and disposable.
 
-So Prism Stream does not use the fountain. It shares only the symbol layer
-beneath it, which gives it one property worth stating plainly:
+So PrismShare Stream does not use the Aphotic Fountain. It shares only the
+symbol layer beneath it, which gives it one property worth stating plainly:
 
 > A Prism symbol is Reed-Solomon protected and CRC-32 checked, so a decoded
 > frame is byte-exact or absent up to the strength of a 32-bit check: an
@@ -57,7 +71,7 @@ recoverable outage  =  min(floor(W / P) - 1, floor(B / P))  lost symbols
 playout latency     =  B                                    packets
 ```
 
-Deeper recovery buys itself with latency, one for one. This is why Prism Stream
+Deeper recovery buys itself with latency, one for one. This is why PrismShare Stream
 is a broadcast and push-to-talk medium and not a two-way call, quite apart from
 the link being one-way.
 
@@ -92,7 +106,7 @@ given codec, so no per-packet length is transmitted either.
 
 ## 4. Frame format
 
-One Prism Stream frame is the byte payload of one symbol. All multi-byte fields
+One PrismShare Stream frame is the byte payload of one symbol. All multi-byte fields
 are big-endian.
 
 | offset | size | field |
@@ -108,15 +122,21 @@ are big-endian.
 The packet count `K` MUST be in the range 1 to 200; the upper bound is a
 defensive limit so a malformed count cannot make a reader allocate wildly. The
 frame length MUST be exactly `10 + K * packetBytes`; a payload that does not
-account for every byte is not a Prism Stream frame.
+account for every byte is not a PrismShare Stream frame.
 
 Unknowns are handled strictly: a payload naming an unknown profile version is
-not a Prism Stream frame and MUST be rejected; a well-formed frame naming an
+not a PrismShare Stream frame and MUST be rejected; a well-formed frame naming an
 unknown codec identifier MUST be ignored whole. The two undefined flag bits
 MUST be sent as zero and MUST be ignored on receipt, so a future revision can
 assign them without breaking receivers already in the field. A reader distinguishes a
 stream frame from an [Aphotic](APHOTIC.md) transfer page and a plain document by
 the magic: `PV` here, `PS` for a transfer page, neither for a document.
+
+An unknown codec's packet size is necessarily unknown, so a version 1 receiver
+cannot apply the codec-dependent exact-length equation to it. For this rule,
+“well-formed” means that the ten-byte header is present, the profile version is
+known and `K` is in `1..200`; the receiver then ignores the complete candidate
+payload without slicing its packet area.
 
 **Flags** (low nibble of byte 5):
 
@@ -168,13 +188,14 @@ Measured end to end, that arithmetic is the whole story: the same 311 byte
 symbol payload that carries 460 ms of AMR redundancy carries 1.7 seconds of
 Codec2 1300, and section 8 shows what that difference buys.
 
-> An audio-rate codec is not the only thing a Prism Stream could carry. The
+> An audio-rate codec is not the only thing a future PrismShare Stream profile
+> could carry. The
 > transport is codec-agnostic; a future profile could define a different codec
 > table, or a variable-rate codec, at which point a per-packet length and an
 > explicit timestamp, both omitted here because a fixed-rate codec needs
 > neither, would be added under a new profile version.
 
-## 6. Two symbols, two windows (informative)
+## 6. Twin Window: two symbols, two windows (informative)
 
 A sender with room for two symbols side by side, which is Prism's normal pair
 presentation, should not show the same frame twice, and should not show the

@@ -1,0 +1,26 @@
+{
+  "vectorSet": "aphotic-fountain-v1",
+  "status": "canonical",
+  "source": {
+    "length": 5000,
+    "byteAt": "(index * 167) mod 251",
+    "chunkSize": 64,
+    "transferId": 19003,
+    "dataPages": 79,
+    "repairMode": 255
+  },
+  "neighborSets": {
+    "79": [13, 22],
+    "80": [28, 43, 70, 26],
+    "81": [62, 8],
+    "82": [13, 25],
+    "83": [50, 29],
+    "84": [3, 36]
+  },
+  "pagePayloadHex": {
+    "0": "50534a3b0000004fff0000138800a753faa652f9a551f8a450f7a34ff6a24ef5a14df4a04cf39f4bf29e4af19d49f09c48ef9b47ee9a46ed9945ec9844eb9743ea9642e99541e89440e7933fe6",
+    "78": "50534a3b004e004fff000013885d09b05c08af5b070000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "79": "50534a3b004f004fff00001388454dc04b4bc04d45c04f47c04d45c04b5bc0455dc0475fc0455dc03b5bc03d45c03f47c03d45c03b4bc0c54dc0c74fc0c54dc0cb4bc0cd45c0cf47c0cd45c0cb",
+    "80": "50534a3b0050004fff00001388e0e3b3e8ddb5e8dfb7e8d5ad15d3a30fd5ad0dd7af03adb50da3b377adb575afb77395bd7593a37f95587d9758639d507da35877bd5875bf5873b56075b3684f"
+  }
+}
