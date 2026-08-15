@@ -1,10 +1,21 @@
-# Prism Code format specification
+# PrismShare Code format specification
 
-A Prism Code is a colour 2D barcode that stacks several ordinary QR Codes into
+PrismShare Code, shortened to **PS Code** after first use, is a colour 2D
+barcode that stacks several ordinary QR Codes into
 the red, green and blue channels of one symbol. Each stacked QR Code is a
 complete, standard, Reed-Solomon protected symbol, so all of the error
 correction work is done by a battle-tested implementation and Prism only has to
 get the colour right.
+
+> **Document status**
+>
+> | field | value |
+> |---|---|
+> | role | normative optical wire specification |
+> | stable target | format version 2 |
+> | proven profile | version 2, one bit per channel |
+> | experimental target | format version 3; see `BIT-LOADING.md` |
+> | payload protocols | Aphotic Transfer (`PS`) and PrismShare Stream (`PV`) are specified separately |
 
 This document is the **normative** format: what bytes and colours are present in
 a valid symbol. How a reader recovers them is described separately and
@@ -109,7 +120,7 @@ as described in RFC 2119. Text in blockquotes, and any passage that explains
 
 * **ISO/IEC 18004:2015**, *Information technology - Automatic identification and
   data capture techniques - QR Code bar code symbology specification.* Every
-  plane of a Prism Code is a QR Code Model 2 symbol as defined there, and this
+  plane of a PS Code is a QR Code Model 2 symbol as defined there, and this
   document does not restate its content.
 * **IETF RFC 2119**, key words for use in RFCs to indicate requirement levels.
 * **IEC 61966-2-1**, sRGB colour space, for the rendered intensity values.
@@ -338,25 +349,20 @@ quietZone = margin - ringInset - ringThickness
 `quietZone` MUST be at least 1. Canvas size for a single matrix is
 `S = N + 2 * margin`.
 
-Five layouts are currently accepted by the reference reader:
+Four layouts are defined for conformance:
 
 | name | margin | ringInset | ringThickness | quiet zone | notes |
 |------|-------:|----------:|--------------:|-----------:|-------|
 | `COMPACT`  | 4 | 1 | 1 | 2 | tightest; halved quiet zone |
 | `BALANCED` | 5 | 2 | 1 | 2 | halved quiet zone |
-| *(unnamed)* | 6 | 2 | 1 | 3 | **see below** |
 | `STANDARD` | 7 | 2 | 1 | 4 | default, full QR quiet zone |
 | `THICK`    | 8 | 2 | 2 | 4 | two module ring cells |
 
 `STANDARD` gives the QR specification's full 4 module quiet zone and is the
-default. An encoder MUST use one of the accepted layouts.
-
-> The `margin = 6` entry has no name in the implementation: it appears only
-> inside the reader's supported list, so a symbol built with it decodes while
-> nothing can refer to it. Before this document is frozen that layout MUST
-> either be named and specified like the others, or removed from the supported
-> list. A standard cannot contain an anonymous accepted geometry, because two
-> implementations cannot agree about a thing that has no name.
+default. An encoder MUST use one of these four layouts. Some reference-reader
+revisions also recognise an experimental `margin = 6` geometry, but it has no
+standard name, is not a conforming encoder target, and is deliberately excluded
+from decoder conformance claims until separately specified.
 
 > The tighter layouts are real density and they are measurably not free. Halving
 > the quiet zone makes a dense symbol at 6 pixels per module fail detection
@@ -390,7 +396,7 @@ surround layouts.
 > A reader MAY additionally attempt ordinary QR decoding when no Prism header is
 > found, best-effort recovery from a cropped ring, or ringless recovery under
 > favourable conditions. Those are reader conveniences. A symbol without a ring
-> is not a conforming Prism Code.
+> is not a conforming PS Code.
 
 Let `a = ringInset`, `t = ringThickness`, and for a canvas of `W x H` modules:
 
@@ -518,7 +524,7 @@ Two limits on that claim, both of which matter to an implementer:
   `STANDARD` surround, which carries the full 4 module quiet zone. The tighter
   layouts halve it, and a dense symbol at 6 pixels per module is measured to
   fail detection outright under a conventional binarizer.
-* Locating a Prism Code is not the same as reading one. **A conventional QR
+* Locating a PS Code is not the same as reading one. **A conventional QR
   payload decoder MUST NOT be expected to recover anything useful** from the
   composite luminance image, because the luminance of a coloured data module is
   not the black-or-white value any single plane holds. Prism is not payload
@@ -933,7 +939,8 @@ Two such payload protocols are defined as their own documents:
 
 Neither touches this document. A reader tells the three payload kinds apart by
 the first bytes of the decoded payload: `PS` for an Aphotic transfer page, `PV`
-for a Prism Stream frame, and neither for a plain document.
+for a PrismShare Stream frame, and neither for a plain document. The complete
+dispatch table is in the suite [README](README.md#payload-dispatch).
 
 Asymmetric bit depth beyond the defined profiles, luminance compatibility with
 ordinary QR payload decoders, and animated transfer are each a future format

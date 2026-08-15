@@ -1,8 +1,17 @@
-# Prism reference decoder
+# PrismShare Code reference decoder
 
-**Status: informative.** Nothing in this document is required for conformance.
+> **Document status**
+>
+> | field | value |
+> |---|---|
+> | role | informative reference decoder |
+> | conformance authority | `FORMAT.md`, not this document |
+> | measured target | format version 2 at one bit per channel |
+> | wire effect | none |
 
-A Prism Code is defined by the bytes and colours in the symbol, which is
+Nothing in this document is required for conformance.
+
+A PS Code is defined by the bytes and colours in the symbol, which is
 [FORMAT.md](FORMAT.md)'s job. How a reader recovers them is a quality-of-
 implementation question, and pinning one algorithm as normative would freeze
 today's calibration research into a permanent standard and forbid a better
@@ -191,7 +200,7 @@ means the capture cannot carry even `b = 1` reliably, which in practice means th
 symbol is too small in frame, too blurred or too dark.
 
 This measures the channel, not the symbol being read, so a reader can be pointed
-at any Prism Code and answer "how many bits per module will this setup carry".
+at any PS Code and answer "how many bits per module will this setup carry".
 The number is tuned to under-promise: across the simulated capture sweep it never
 claims a depth that then fails to decode, and it frequently claims one less than
 what works.

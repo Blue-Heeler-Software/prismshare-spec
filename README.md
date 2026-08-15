@@ -1,78 +1,119 @@
-# Prism Code
+# PrismShare Protocol Suite
 
-Prism Code is an open colour 2D barcode. It stacks several ordinary QR Codes into
-the red, green and blue channels of one symbol, so a single code carries several
-times the data of the black and white QR Code it is built from, while staying
-locatable by an ordinary QR detector.
+PrismShare moves files and live media across a one-way camera-to-screen link.
+It needs no pairing, network, account or return channel. The open specification
+is a small family of layers rather than one monolithic format.
 
-This repository is the **specification**, published for independent
-implementation and review. The reference implementation lives elsewhere; nothing
-here depends on it.
+**PrismShare** is the product and project name. **PrismShare Code**
+(**PS Code**) is the colour 2D symbol at its foundation. **Aphotic Transfer**
+carries exact files using the **Aphotic Fountain** for rateless repair.
+**PrismShare Stream** carries live media with a bounded redundancy window.
 
-## The family
+This repository is the authoritative **PrismShare Protocol Suite**. The
+reference implementation lives elsewhere; conformance depends on the normative
+documents and vectors here, not on reproducing its internals.
 
-Three layers, three documents. The symbol format knows nothing of what it
-carries; the payload protocols know nothing of the optics.
+> **Naming note.** The repository slug is an address, not the standard's name.
+> The canonical repository is `Mashr-Systems/prismshare-spec`; GitHub preserves
+> the former `Blue-Heeler-Software/prism-spec` address as a compatibility
+> redirect. Prose and package listings use **PrismShare Protocol Suite**. See
+> [BRANDING.md](BRANDING.md).
 
-- **[FORMAT.md](FORMAT.md)** - the normative symbol format: exactly what bytes
-  and colours one Prism Code contains. Read this to build an encoder or decoder.
-- **[DECODER.md](DECODER.md)** - the reference decoder, informative. How a reader
-  recovers the payload, including calibration, bit-depth estimation, and matching
-  the reader's rate to a sender it cannot talk back to.
-- **[BIT-LOADING.md](BIT-LOADING.md)** - per-channel bit loading, a format
-  extension whose first profile was implemented and falsified on real hardware;
-  the remaining profiles are implemented but untested. Kept so the dead end, and
-  the measurements that closed it, are not lost.
+## Architecture
 
-Two payload protocols ride inside Prism symbols and are specified separately, so
-they can never disturb the optical format:
+| layer or companion | document | status | purpose |
+|---|---|---|---|
+| optical symbol | **[FORMAT.md](FORMAT.md)** | normative | Bytes, colours, geometry and headers of a PrismShare Code symbol. |
+| decoder guidance | **[DECODER.md](DECODER.md)** | informative | One measured way to recover a symbol through a camera. |
+| optical experiment | **[BIT-LOADING.md](BIT-LOADING.md)** | experimental | Per-channel loading profiles, including the hardware result that falsified the first profile. |
+| exact-object payload | **[APHOTIC.md](APHOTIC.md)** | normative | Aphotic Transfer pages and the Aphotic Fountain. |
+| live payload | **[STREAM.md](STREAM.md)** | normative | PrismShare Stream frames, redundancy windows and the version 1 audio profile. |
 
-- **[APHOTIC.md](APHOTIC.md)** - a **file** across a sequence of symbols, with
-  rateless fountain repair so a reader that missed pages recovers without the
-  sender ever repeating itself. Complete-file, eventual delivery.
-- **[STREAM.md](STREAM.md)** - a **live stream**, with a redundancy window and a
-  jitter buffer rather than a fountain, and an audio profile on top. Real-time
-  delivery that conceals what it cannot recover in time.
+The optical format does not know what its payload means. The payload protocols
+do not know how the symbol is displayed or photographed. This separation is a
+conformance boundary, not merely an editorial arrangement.
 
-Start with [FORMAT.md](FORMAT.md) section 0, which states plainly which
-configurations are proven through a camera and which are only defined.
+### Payload dispatch
+
+After a PrismShare Code symbol has yielded its payload bytes, the first two
+bytes select the next layer:
+
+| prefix | payload family | required action |
+|---|---|---|
+| `PS` (`0x50 0x53`) | Aphotic Transfer | Parse as a 13-byte Aphotic page header followed by one chunk. |
+| `PV` (`0x50 0x56`) | PrismShare Stream v1 | Parse as a 10-byte stream header followed by fixed-size packets. |
+| neither | plain document | Deliver the payload to the application without interpreting it as either protocol. |
+
+`PV` does **not** mean “fountain stream.” Exact files and live media deliberately
+use different loss disciplines: Aphotic uses rateless coded pages; Stream uses
+recent-packet repetition and a playout buffer.
+
+## Conformance and implementation aids
+
+- [CONFORMANCE.md](CONFORMANCE.md) defines claimable components and the present
+  proof status.
+- [VALIDATION.md](VALIDATION.md) collects required rejection and ignore rules.
+- [EXAMPLES.md](EXAMPLES.md) provides worked wire examples.
+- [GLOSSARY.md](GLOSSARY.md) fixes terminology used across the suite.
+- [VERSIONING.md](VERSIONING.md) explains version fields, reserved values and
+  compatibility policy.
+- [SECURITY.md](SECURITY.md) describes trust boundaries and resource limits.
+- [vectors/](vectors/) contains canonical protocol vectors and the scaffold for
+  full symbol conformance vectors.
+- [CHANGELOG.md](CHANGELOG.md) separates normative corrections from editorial
+  changes.
 
 ## Status
 
 This is a working specification, not yet a frozen standard.
 
-- The symbol format at one bit per channel, and the Aphotic file transfer on top
-  of it, are proven on real handsets, including through a public video
-  platform's transcode: a paired version 6 H configuration was received by
-  every camera tested at every playback quality from 720p up. Section 0 of the
-  format records the measured envelope.
-- Higher bit depths, and format version 3's per-channel loading, are defined but
-  have not decoded from a camera. Section 0 of the format is explicit about this.
-- Prism Stream is verified end to end through real cameras: with Codec2 1300
-  inside a version 8 symbol pair, the weakest handset tested streamed
-  contiguous speech from a monitor, and the strongest played minutes with no
-  packets concealed. STREAM.md section 8 has the measurements.
-- Canonical conformance vectors do not exist yet. Until they do, no
-  implementation can demonstrate interoperability, and the specification says so.
+- PrismShare Code format version 2 at one bit per channel is proven on real
+  handsets. A paired version 6 H presentation survived a public video
+  platform's transcode at every tested playback quality from 720p upward.
+- Higher bit depths and format version 3's per-channel profiles are defined but
+  are not proven through a camera. Profile 1 was implemented and falsified.
+- Aphotic Transfer and the Aphotic Fountain are proven on real handsets,
+  including through the same video transcode.
+- PrismShare Stream v1 is verified end to end through real cameras. Codec2 1300
+  inside a version 8 symbol pair carried contiguous speech on the weakest
+  handset tested.
+- Canonical Aphotic and Stream protocol vectors now seed the conformance set.
+  Full symbol-image vectors remain a pre-freeze requirement; until they exist,
+  no implementation can demonstrate complete optical interoperability.
 
-Corrections and review are welcome through this repository's issues.
+## Branding and name clearance
 
-## About the name
+“Prism” is heavily used in software and broadcast products. The suite therefore
+uses **PrismShare** as its primary compound mark and avoids presenting bare
+“Prism” as the product name. **Aphotic Fountain** is the distinctive name of the
+rateless repair mechanism; “fountain code” remains beside it as the searchable
+technical description.
 
-Prism Code is an independent open format. Every plane of a symbol is a QR Code,
-and **QR Code is a registered trademark of DENSO WAVE INCORPORATED**; this
-project is not endorsed by or affiliated with the trademark holder, and
-implementers are responsible for their own assessment of any intellectual
-property that applies to QR Code encoding and decoding in their jurisdiction.
+This naming policy is product architecture, not legal clearance. Before a
+commercial launch, obtain professional trade-mark searches in the intended
+classes and countries and check app-store, package, domain and social handles.
+
+## About QR Code
+
+PrismShare is an independent open format. Every plane of a PrismShare Code
+symbol is a QR Code, and **QR Code is a registered trademark of DENSO WAVE
+INCORPORATED**. This project is not endorsed by or affiliated with the
+trade-mark holder. Implementers are responsible for assessing any intellectual
+property applicable to QR Code encoding and decoding in their jurisdiction.
+
+## Author
+
+PrismShare Code and its Aphotic Transfer and PrismShare Stream payload
+protocols were created and authored by **[aXL333](https://github.com/aXL333)**
+and are published by **Blue Heeler Software**.
 
 ## Acknowledgements
 
-The first public revision of these documents incorporates a detailed format
-review by **[NomNomski](https://github.com/NomNomski)**, whose change request
-drove the split of the normative format from the reference decoder, the
-correction of the capacity and calibration arithmetic, the honest accounting of
-proven versus defined configurations, and the separation of the file-transfer and
-streaming protocols into documents of their own.
+The first public revision incorporates a detailed format review by
+**[NomNomski](https://github.com/NomNomski)**. The review drove the split of the
+normative format from the reference decoder, corrections to capacity and
+calibration arithmetic, honest accounting of proven versus defined
+configurations, and separate documents for file transfer and live streaming.
 
 ## License
 

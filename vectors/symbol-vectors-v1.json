@@ -1,0 +1,14 @@
+{
+  "vectorSet": "prismshare-code-symbol-v1",
+  "status": "scaffold",
+  "cases": [],
+  "requiredCoverage": [
+    "format-v2-b1-b2-b3",
+    "accepted-surround-layouts",
+    "qr-versions-2-7-20-40",
+    "plane-bytes-and-modules",
+    "rendered-pixel-hashes",
+    "mirrored-and-negative-captures",
+    "format-v3-profile-headers"
+  ]
+}
