@@ -105,7 +105,7 @@ property applicable to QR Code encoding and decoding in their jurisdiction.
 
 PrismShare Code and its Aphotic Transfer and PrismShare Stream payload
 protocols were created and authored by **[aXL333](https://github.com/aXL333)**
-and are published by **MASHR Systems**.
+and are published by **Blue Heeler Software**.
 
 ## Acknowledgements
 
