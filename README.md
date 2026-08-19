@@ -44,6 +44,13 @@ bytes select the next layer:
 | `PV` (`0x50 0x56`) | PrismShare Stream v1 | Parse as a 10-byte stream header followed by fixed-size packets. |
 | neither | plain document | Deliver the payload to the application without interpreting it as either protocol. |
 
+One profile pins down a common plain-document payload:
+
+- **[PSCARD.md](PSCARD.md)** - **PS Card**, a business card: a standard vCard
+  in one static symbol, never a stream, with an optional brand-colour
+  extension that only a colour code can carry. Detected by its text beginning
+  `BEGIN:VCARD`, not by any transport flag.
+
 `PV` does **not** mean “fountain stream.” Exact files and live media deliberately
 use different loss disciplines: Aphotic uses rateless coded pages; Stream uses
 recent-packet repetition and a playout buffer.
