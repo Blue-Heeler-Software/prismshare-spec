@@ -7,6 +7,12 @@ implementer can tell whether accepted bytes changed.
 
 ### Editorial and conformance infrastructure
 
+- Add **PSPAY.md**, the experimental PS Pay payment handshake: three signed
+  messages under the `PY` dispatch prefix, integer-only amounts, itemised
+  invoices whose totals must equal their lines, hash chaining and
+  trust-on-first-use merchant pinning. Registered `PY` in the payload
+  dispatch table. Experimental: mock rails only, wire may change.
+
 - Establish **PrismShare** as the umbrella product and project name.
 - Name the suite **PrismShare Protocol Suite**, the optical format
   **PrismShare Code** with **PS Code** as its short form, the file protocol

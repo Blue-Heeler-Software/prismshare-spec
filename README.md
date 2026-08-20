@@ -27,6 +27,7 @@ documents and vectors here, not on reproducing its internals.
 | optical experiment | **[BIT-LOADING.md](BIT-LOADING.md)** | experimental | Per-channel loading profiles, including the hardware result that falsified the first profile. |
 | exact-object payload | **[APHOTIC.md](APHOTIC.md)** | normative | Aphotic Transfer pages and the Aphotic Fountain. |
 | live payload | **[STREAM.md](STREAM.md)** | normative | PrismShare Stream frames, redundancy windows and the version 1 audio profile. |
+| payment handshake | **[PSPAY.md](PSPAY.md)** | experimental | PS Pay: a signed three-message payment handshake, one static symbol per message. |
 
 The optical format does not know what its payload means. The payload protocols
 do not know how the symbol is displayed or photographed. This separation is a
@@ -41,6 +42,7 @@ bytes select the next layer:
 |---|---|---|
 | `PS` (`0x50 0x53`) | Aphotic Transfer | Parse as a 13-byte Aphotic page header followed by one chunk. |
 | `PV` (`0x50 0x56`) | PrismShare Stream v1 | Parse as a 10-byte stream header followed by fixed-size packets. |
+| `PY` (`0x50 0x59`) | PS Pay (experimental) | Parse as a PS Pay handshake message; readers without PS Pay treat it as a plain document. |
 | neither | plain document | Deliver the payload to the application without interpreting it as either protocol. |
 
 One profile pins down a common plain-document payload:
