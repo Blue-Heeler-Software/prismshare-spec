@@ -75,16 +75,16 @@ Canonical and compatibility names:
 
 | surface | preferred value |
 |---|---|
-| specification repository | `Mashr-Systems/prismshare-spec` |
+| specification repository | `Blue-Heeler-Software/prismshare-spec` |
 | application repository | `prismshare` |
 | specification title | `PrismShare Protocol Suite` |
 | app-store title | `PrismShare` plus a descriptive subtitle |
 | command | `prism` may remain as a concise compatibility command |
 
-The specification repository moved from
-`Blue-Heeler-Software/prism-spec` to `Mashr-Systems/prismshare-spec` on
-2026-08-11. GitHub preserves the former address as a redirect. Package, signing
-identity and app-store changes remain separate release operations.
+The canonical specification repository is
+`Blue-Heeler-Software/prismshare-spec`. Older repository addresses may continue
+to resolve as compatibility redirects. Package, signing identity and app-store
+changes remain separate release operations.
 
 ## 6. Clearance note
 
