@@ -14,9 +14,8 @@ reference implementation lives elsewhere; conformance depends on the normative
 documents and vectors here, not on reproducing its internals.
 
 > **Naming note.** The repository slug is an address, not the standard's name.
-> The canonical repository is `Mashr-Systems/prismshare-spec`; GitHub preserves
-> the former `Blue-Heeler-Software/prism-spec` address as a compatibility
-> redirect. Prose and package listings use **PrismShare Protocol Suite**. See
+> The canonical repository is `Blue-Heeler-Software/prismshare-spec`. Prose and
+> package listings use **PrismShare Protocol Suite**. See
 > [BRANDING.md](BRANDING.md).
 
 ## Architecture
